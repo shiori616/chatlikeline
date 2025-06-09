@@ -94,7 +94,7 @@ function partnerMessageDisplay() {
   };
   let partnerMessage = `
             <div id="" class="partner-msg">
-                  <img src="img/0.png" alt="profile-photo" class ="partner-photo">
+                  <img src="img/matsuoka.JPG" alt="profile-photo" class ="partner-photo">
                   <p class="partner-text">${partnerMsg.text}</p>
                   <p class="partner-time">${partnerMsg.date}</p>
             </div>
