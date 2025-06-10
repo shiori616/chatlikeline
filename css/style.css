@@ -88,9 +88,10 @@ body {
     text-align: right;
     gap: 10px; /* 子要素間の間隔を設定 */
     width: 100%; /* 必要に応じて調整 */
-    padding: 5px 10px 5px 5px; /* 内側の余白を追加 */
+    padding: 5px 0px; /* 内側の余白を追加 */
     border-radius: 5px; /* 角を丸くする（任意） */
-    text-align: right; /* 要素を右寄せにする */
+    text-align: left; /* 要素を右寄せにする */
+    padding: 5px; /* 上下のマージンを追加 */
 }
 
 .sender-time {
@@ -111,7 +112,7 @@ body {
 .sender-text::before {
     content: ""; /* 空のコンテンツを作成 */
     position: absolute; /* 吹き出しの位置を調整 */
-    top: 50%; /* 縦方向中央に配置 */
+    top: 15px; /* 縦方向中央に配置 */
     transform: translateY(-50%); /* 矢印を中央揃え */
     right: -10px; /* 吹き出しの右側に矢印を配置 */
     width: 0;
@@ -155,12 +156,13 @@ body {
     padding: 10px; /* 内側の余白を追加 */
     border-radius: 10px; /* 角を丸くする */
     text-align: left;
+    margin: 5px 0; /* 上下のマージンを追加 */
 }
 
 .partner-text::before {
     content: ""; /* 空のコンテンツを作成 */
     position: absolute; /* 吹き出しの位置を調整 */
-    top: 50%; /* 吹き出しの縦方向中央に配置 */
+    top: 15px; /* 吹き出しの縦方向中央に配置 */
     transform: translateY(-50%); /* 矢印を中央揃え */
     left: -10px; /* 吹き出しの左側に矢印を配置 */
     width: 0;
