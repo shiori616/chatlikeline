@@ -27,33 +27,57 @@ const db = getDatabase(app); //dbに↑のappを渡す
 const dbRef = ref(db, 'chat'); //chatにデータを保存する
 
 
-// 送信イベント
+// 送信ボタンが押されたときの処理
 $("#send-btn").on("click", function(){
+    //送信イベント[msg]作成
     const msg = {
-        text : $("#msg-input-text").val(),
-        date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) // 時刻のみ取得
+        text : $("#msg-input-text").val()
+        ,time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) // 時刻のみ取得
+        ,date: new Date().toLocaleDateString('ja-JP') // 日付のみ取得
       };
+
+    // 返答のパートナーメッセージ
+    const partnerMsg = {
+        text: getRandomPartnerMessage(), //ランダムに選択したメッセージ
+        date: new Date().toLocaleDateString('ja-JP') // 日付のみ取得
+        ,time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) // 時刻のみ取得
+    }
+
+    // 両方のメッセージをまとめたオブジェクト
+    const combinedMsg = {
+        sender: msg, // 送信者のメッセージ
+        partner: partnerMsg // パートナーのメッセージ
+    };
+
     // 送信データをデータベースに格納
     const newPostRef = push(dbRef); //UNIQUEなキーを生成
-    set(newPostRef, msg) //データを保存
+    set(newPostRef, combinedMsg) //データを保存
+
 });
 
 // 受信イベント（データ個数分自動でループ）
 onChildAdded(dbRef,function(data){
   const msg = data.val(); //データを取得とオブジェクトに変換
   const key = data.key; //キーを取得
-  senderMessageDisplay(msg); //メッセージを表示する関数を呼び出す
+
+  const senderMsg = msg.sender; // 送信者のメッセージ
+  const partnerMsg = msg.partner; // パートナーのメッセージ
+
+
+  senderMessageDisplay(senderMsg); //メッセージを表示する関数を呼び出す
   scrollToBottom(); //スクロールを下端に移動
-  partnerMessageDisplay(); //パートナーメッセージを表示する関数を呼び出す
+  partnerMessageDisplay(partnerMsg); //パートナーメッセージを表示する関数を呼び出す
   scrollToBottom(); //スクロールを下端に移動
   
 });
 
-// 送信メッセージを表示する関数
+
+// 送信メッセージを表示する関数、最初に入った状態（過去履歴がそのまま表示される）
 function senderMessageDisplay(msg) {
+      // メッセージを作成して表示
     let senderMessage = `
           <div id="" class="sender-msg">
-            <p class="sender-time">${msg.date}</p>
+            <p class="sender-time">${msg.time}</p>
             <p class="sender-text">${msg.text}</p>
           </div>
         `;
@@ -86,17 +110,12 @@ function getRandomPartnerMessage() {
 };
 
 // パートナーメッセージを表示する関数
-function partnerMessageDisplay() {
-  getRandomPartnerMessage(); //ランダムにメッセージを選択
-  const partnerMsg = {
-    text: getRandomPartnerMessage(), //ランダムに選択したメッセージ
-    date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) // 時刻のみ取得
-  };
+function partnerMessageDisplay(partnerMsg) {
   let partnerMessage = `
             <div id="" class="partner-msg">
                   <img src="img/matsuoka.JPG" alt="profile-photo" class ="partner-photo">
                   <p class="partner-text">${partnerMsg.text}</p>
-                  <p class="partner-time">${partnerMsg.date}</p>
+                  <p class="partner-time">${partnerMsg.time}</p>
             </div>
       `;
   $("#msg-box").append(partnerMessage); //メッセージを表示
